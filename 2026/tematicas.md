@@ -19,4 +19,26 @@
 ## Kelly (TSI4)
 
 ## Davi (TSI4)
+### Otimização de desempenho: consultas no ORM do Django e cache com Redis
+Problema:
+- A página pública de listagem de cursos FIC tende a ser a mais acessada do sistema, principalmente em períodos de inscrição. Consultas mal escritas no ORM (como o problema das "N+1 consultas") e a ausência de cache podem deixar o sistema lento com muitos acessos simultâneos.
 
+O que implementar:
+- Um protótipo com a listagem de cursos e turmas (com campus, eixo, número de vagas restantes etc.) implementada inicialmente de forma "ingênua".
+- Otimizações aplicadas em etapas, medindo cada uma separadamente:
+	- select_related e prefetch_related;
+        - índices no banco de dados;
+        - anotações e agregações no banco (em vez de cálculos em Python);
+        - cache com Redis (cache de página, de fragmento de template e de consultas), com invalidação quando um curso é alterado.
+- Base de dados sintética grande (dezenas de milhares de inscrições).
+
+Como validar:
+- Número de consultas SQL por requisição em cada etapa (django-debug-toolbar ou assertNumQueries).
+- Tempo médio de resposta, percentis (p95) e requisições por segundo em testes de carga com Locust, para diferentes quantidades de usuários simultâneos.
+- Verificação automatizada de que o cache é invalidado corretamente (o dado exibido nunca fica desatualizado após uma edição).
+
+Integração futura ao iFIC:
+- Melhorias diretas nas páginas públicas e nas listagens do painel administrativo.
+
+Tecnologias:
+- Django, PostgreSQL, Redis, django-redis, django-debug-toolbar, Locust.
