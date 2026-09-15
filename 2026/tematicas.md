@@ -17,6 +17,23 @@
 ### Temática
 
 ## Kelly (TSI4)
+### Busca de cursos: comparação entre busca textual do PostgreSQL e um motor de busca dedicado
+Problema:
+- Candidatos procuram cursos por palavras que nem sempre estão no título ("informática básica", "programação", "excel", "costura"). Uma busca simples com LIKE não trata acentos, plurais, erros de digitação nem ordena os resultados por relevância.
+O que implementar:
+- Um catálogo sintético com centenas de cursos FIC (nome, ementa, eixo tecnológico, campus). Pode-se partir dos nomes do Guia Pronatec de Cursos FIC, que é público.
+- Três implementações de busca:
+	- icontains (LIKE) do ORM, como linha de base;
+        - busca textual completa do PostgreSQL (django.contrib.postgres.search, com dicionário em português, unaccent e similaridade por trigramas);
+        - motor de busca dedicado (Meilisearch ou Elasticsearch).
+Como validar:
+- O próprio aluno monta uma coleção de teste: uma lista de consultas (incluindo consultas com erro de digitação e sem acento) e, para cada uma, quais cursos são relevantes.
+- Métricas de recuperação da informação: precisão, revocação, precisão nos primeiros k resultados (P@5) e MRR.
+- Tempo de resposta e consumo de recursos (memória, espaço em disco do índice) de cada abordagem.
+Integração futura ao iFIC:
+- Campo de busca do catálogo público de cursos.
+Tecnologias:
+- Django, PostgreSQL (pg_trgm, unaccent), Meilisearch ou Elasticsearch.
 
 ## Davi (TSI4)
 ### Otimização de desempenho: consultas no ORM do Django e cache com Redis
