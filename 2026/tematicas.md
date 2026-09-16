@@ -14,7 +14,27 @@
 
 # PROJETO IFIC
 ## Kaio (INFO1)
-### Temática
+### Validador e importador de planilhas de cursos FIC
+
+Problema:
+- Muitas informações de cursos FIC (nome do curso, carga horária, turno, vagas, datas de início e fim) ainda são controladas em planilhas preenchidas manualmente, com erros de digitação, campos vazios e datas inconsistentes. Importar esses dados para o iFIC sem verificação levaria erros para o sistema.
+
+O que implementar:
+- Um script em Python que lê uma planilha (.csv e/ou .xlsx, com a biblioteca openpyxl ou o módulo csv).
+- Regras de validação para cada coluna, por exemplo: carga horária numérica e positiva; data de término posterior à data de início; número de vagas maior que zero; campos obrigatórios preenchidos; turno dentro de uma lista permitida (matutino, vespertino, noturno).
+- Um relatório de saída indicando, para cada linha com problema, qual regra foi violada.
+- Uma planilha "limpa" com apenas as linhas válidas, pronta para importação.
+
+Como validar:
+- Criar uma planilha fictícia com, por exemplo, 500 linhas, na qual o próprio aluno insere erros de propósito e anota quais são (o "gabarito").
+- Comparar o relatório do script com o gabarito: quantos erros foram detectados, quantos passaram despercebidos e quantos falsos alarmes ocorreram.
+- Medir o tempo de processamento para planilhas de tamanhos diferentes (100, 1.000 e 10.000 linhas).
+
+Integração futura ao iFIC:
+- O validador pode virar a funcionalidade de importação em lote de cursos do painel administrativo.
+
+Tecnologias:
+- Python, csv, openpyxl, datetime.
 
 ## Kelly (TSI4)
 ### Busca de cursos: comparação entre busca textual do PostgreSQL e um motor de busca dedicado
@@ -59,3 +79,27 @@ Integração futura ao iFIC:
 
 Tecnologias:
 - Django, PostgreSQL, Redis, django-redis, django-debug-toolbar, Locust.
+
+# Projeto Agro
+
+## Ezequias e Teófilo
+### Calculadora de necessidade de água das culturas a partir de dados climáticos
+
+Problema:
+- O uso consciente da água é um dos temas de Educação Ambiental do projeto. A quantidade de água que uma cultura perde para a atmosfera depende do clima e pode ser estimada pela evapotranspiração. Comparando esse valor com a chuva, é possível estimar se falta ou sobra água para a plantação.
+
+O que implementar:
+- Um script que obtém dados diários de temperatura e chuva de um município (API da NASA POWER).
+- Cálculo da evapotranspiração de referência (ET₀) pelo método de Hargreaves-Samani, que usa apenas temperatura e é simples de programar.
+- Cálculo da necessidade de água de uma cultura (por exemplo, mandioca ou feijão) multiplicando a ET₀ pelo coeficiente de cultura (Kc) indicado no manual FAO-56.
+- Saída com tabela e gráfico mensal comparando chuva e necessidade de água da cultura (déficit ou excedente).
+
+Como validar:
+- Comparar a ET₀ calculada pelo aluno com a calculada pelo método de Penman-Monteith (o método padrão da FAO), usando a biblioteca pyet sobre os mesmos dados. Calcular o erro médio e a correlação.
+- Testes automatizados com pytest usando valores de exemplo publicados no manual FAO-56.
+
+Integração futura ao AgroAgreste:
+- Indicador ambiental de balanço hídrico e conteúdo educativo sobre uso da água.
+
+Tecnologias:
+- Python, requests, pandas, matplotlib, pyet, pytest.
